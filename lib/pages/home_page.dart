@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/models/tweet.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +40,9 @@ class _HomePageState extends State<HomePage> {
         body: const TabBarView(
           children: [
             _TweetFeed(),
-            // _TweetFeed(),
+            Center(
+              child: Text("Liste d'abonnements vide"),
+            ),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -154,7 +157,7 @@ class _TweetCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _TweetMetric(
                       icon: Icons.chat_bubble_outline,
@@ -187,11 +190,18 @@ class _TweetMetric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: const Color.fromARGB(153, 180, 180, 180)),  //symbole en dessous d'un tweet
+        Icon(
+          icon,
+          size: 16,
+          color: const Color.fromARGB(153, 180, 180, 180),
+        ), //symbole en dessous d'un tweet
         const SizedBox(width: 10),
         Text(
           value,
-          style: const TextStyle(color: Color.fromARGB(153, 180, 180, 180), fontSize: 12), // chiffre après les symbole
+          style: const TextStyle(
+            color: Color.fromARGB(153, 180, 180, 180),
+            fontSize: 12,
+          ), // chiffre après les symbole
         ),
       ],
     );
