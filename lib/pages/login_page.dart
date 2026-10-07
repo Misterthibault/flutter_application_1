@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                       _isPasswordVisible
                           ? Icons.visibility_off
                           : Icons.visibility,
-                    ),
+                    ),  
                     onPressed: () {
                       setState(() {
                         _isPasswordVisible = !_isPasswordVisible;

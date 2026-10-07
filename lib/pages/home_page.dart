@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/tweet.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedNavigationIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +18,8 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          leading: const Padding(               // ajoute une photo de profil CIRCULAIRE
+          leading: const Padding(
+            // ajoute une photo de profil CIRCULAIRE
             padding: EdgeInsets.all(8),
             child: CircleAvatar(
               backgroundColor: Colors.white24,
@@ -31,7 +39,37 @@ class HomePage extends StatelessWidget {
         body: const TabBarView(
           children: [
             _TweetFeed(),
-            _TweetFeed(),
+            // _TweetFeed(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedNavigationIndex,
+          onTap: (index) {
+            setState(() => _selectedNavigationIndex = index);
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.black,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: 'Accueil',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Recherche',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              label: 'Profil',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_none),
+              label: 'Notifications',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.mail),
+              label: 'Messages',
+            ),
           ],
         ),
       ),
@@ -99,7 +137,7 @@ class _TweetCard extends StatelessWidget {
                         padding: EdgeInsets.only(left: 4),
                         child: Icon(
                           Icons.verified,
-                          color: Colors.lightBlue,
+                          color: Color.fromARGB(255, 125, 125, 125),
                           size: 16,
                         ),
                       ),
@@ -138,7 +176,6 @@ class _TweetCard extends StatelessWidget {
             ),
           ),
           Spacer(), // espacer en prenant tout l'espace disponible
-          
         ],
       ),
     );
@@ -155,7 +192,7 @@ class _TweetMetric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: Colors.white60),
+        Icon(icon, size: 16, color: const Color.fromARGB(153, 180, 180, 180)),
         const SizedBox(width: 4),
         Text(
           value,
