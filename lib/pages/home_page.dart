@@ -126,10 +126,6 @@ class _TweetCard extends StatelessWidget {
                       child: Text(
                         tweet.name,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                     ),
                     if (tweet.verified)
@@ -158,7 +154,7 @@ class _TweetCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _TweetMetric(
                       icon: Icons.chat_bubble_outline,
@@ -174,8 +170,7 @@ class _TweetCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          Spacer(), // espacer en prenant tout l'espace disponible
+          ), // espacer en prenant tout l'espace disponible
         ],
       ),
     );
@@ -192,11 +187,11 @@ class _TweetMetric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: const Color.fromARGB(153, 180, 180, 180)),
-        const SizedBox(width: 4),
+        Icon(icon, size: 16, color: const Color.fromARGB(153, 180, 180, 180)),  //symbole en dessous d'un tweet
+        const SizedBox(width: 10),
         Text(
           value,
-          style: const TextStyle(color: Colors.white60, fontSize: 12),
+          style: const TextStyle(color: Color.fromARGB(153, 180, 180, 180), fontSize: 12), // chiffre après les symbole
         ),
       ],
     );
