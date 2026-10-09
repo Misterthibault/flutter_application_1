@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/models/tweet.dart';
+import 'package:flutter_application_1/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,6 +30,20 @@ class _HomePageState extends State<HomePage> {
           title: Image.asset('asset/logo_X.jpg', height: 30),
           backgroundColor: Colors.black,
           centerTitle: true,
+          actions: [
+            IconButton(
+              tooltip: 'Déconnexion',
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
+              },
+            ),
+          ],
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Pour vous'),

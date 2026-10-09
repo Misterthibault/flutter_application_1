@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/pages/home_page.dart';
+import 'package:flutter_application_1/persistence/settings_persistence.dart';
 
 class LoginPage extends StatefulWidget {
   const new({super.key});
@@ -12,8 +12,39 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isPasswordVisible = true;
   final formKey = GlobalKey<FormState>();
-  String mail = '';
+  String username = '';
   String password = '';
+  final _settingsPersistence = SettingsPersistence();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _hasEditedCredentials = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedSettings();
+  }
+
+  Future<void> _loadSavedSettings() async {
+    try {
+      final settings = await _settingsPersistence.loadSettings();
+      if (!mounted || _hasEditedCredentials) return;
+      _usernameController.text = settings['username']!;
+      _passwordController.text = settings['password']!;
+    } on Exception catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Impossible de charger les identifiants : $error')),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +75,26 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
 
               TextFormField(
+                controller: _usernameController,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'username',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Entrez votre email';
+                    return 'Entrez votre username';  
                   }
                   return null;
                 },
-                onSaved: (value) => mail = value ?? '',
+                onSaved: (value) => username = value ?? '',
+                onChanged: (_) => _hasEditedCredentials = true,
               ),
 
               SizedBox(height: 20),
 
               TextFormField(
+                controller: _passwordController,
                 obscureText: _isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -88,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                   return null;
                 },
                 onSaved: (value) => password = value ?? '',
+                onChanged: (_) => _hasEditedCredentials = true,
               ),
 
               Spacer(), // espacer en prenant tout l'espace disponible
@@ -98,9 +133,26 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: Colors.white,
                   
                 ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (formKey.currentState?.validate() ?? false) {
                       formKey.currentState?.save();
+                      try {
+                        await _settingsPersistence.saveSettings(
+                          username,
+                          password,
+                        );
+                      } on Exception catch (error) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Impossible d’enregistrer les identifiants : $error',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+                      if (!mounted) return;
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
                       // Handle login logic here
                     }
